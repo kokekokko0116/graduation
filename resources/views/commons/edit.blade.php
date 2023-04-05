@@ -6,7 +6,6 @@
         <div class="hidden sm:flex sm:items-center sm:ml-6">
           <form method="GET" action="{{ route('mastertest.create') }}">
               <select name="series_name" onchange="this.form.submit()">
-                  <option value="">すべてのシリーズ</option>
                   @foreach ($series_names as $series_name)
                       <option value="{{ $series_name->series_name }}" @if ($selected_series_name == $series_name->series_name) selected @endif>
                           {{ $series_name->series_name }}

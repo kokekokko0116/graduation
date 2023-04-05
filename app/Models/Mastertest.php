@@ -24,4 +24,9 @@ class Mastertest extends Model
       {
         return $this->belongsToMany(Stock::class)->withTimestamps();
       }
+      
+    public static function getLatestSeriesnameById()
+      {
+        return self::latest('id')->value('series_name');
+      }
 }

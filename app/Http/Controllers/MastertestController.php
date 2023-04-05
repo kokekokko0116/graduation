@@ -27,7 +27,7 @@ class MastertestController extends Controller
         }
         
         return response()->view('commons.index', compact('mastertests','series_names', 'selected_series_name'));
-
+        
     }
 
     /**
@@ -40,6 +40,11 @@ class MastertestController extends Controller
         $mastertests = Mastertest::getAllOrderByPrice();
         if (!empty($selected_series_name)) {
             $mastertests = $mastertests->where('series_name', $selected_series_name);
+        }
+        else{
+            $selected_series_name = Mastertest::getLatestSeriesnameById();
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
+
         }
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
