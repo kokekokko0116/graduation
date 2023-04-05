@@ -29,7 +29,6 @@ $date_json = json_encode($date);
         const price = <?php echo $price_json; ?>;
         const name = <?php echo $name_json; ?>;
         const date = <?php echo $date_json; ?>;
-        const label =[];
         // 最新データがprice[0]にきているため反転操作
         price.reverse(); date.reverse();
         

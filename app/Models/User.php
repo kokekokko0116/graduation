@@ -46,8 +46,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Mastertest::class)->withTimestamps()->withPivot('stock');
       }
     
-//   public function cards()
-//   {
-//     return $this->hasMany(Card::class)->withTimestamps();
-//   }
+      public function assets()
+      {
+        return $this->hasMany(Asset::class);
+      }
 }

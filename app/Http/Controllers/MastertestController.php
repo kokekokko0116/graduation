@@ -106,8 +106,13 @@ class MastertestController extends Controller
             $data[0] += $price * $stock;
             $data[1] += $stock;
         }
+        $assets = User::query()
+          ->find(Auth::user()->id)
+          ->assets()
+          ->orderBy('created_at','desc')
+          ->get();
                 
-        return response()->view('commons.mypage', compact('data'));
+        return response()->view('commons.mypage', compact('data','assets'));
     }
     
     public function increment(Request $request, $id)
