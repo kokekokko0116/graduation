@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('series_name');
             $table->string('number');
             $table->string('name');
-            $table->integer('price');
+            $table->text('price');
             $table->string('rarerity');
             $table->timestamps();
         });

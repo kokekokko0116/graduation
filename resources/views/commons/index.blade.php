@@ -31,15 +31,12 @@
               @foreach ($mastertests as $mastertest)
               <tr class="hover:bg-gray-lighter">
                 <td class="py-4 px-6 border-b border-gray-light dark:border-gray-600">
-                  <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">カード名: {{$mastertest-> name}}</h3>
-                  <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">市場価格: {{$mastertest-> price}}円</h3>
-                  <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">レアリティ: {{$mastertest-> rarerity}}</h3>
-                  <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">個数: {{ $mastertest->users()->wherePivot('user_id', Auth::id())->withPivot('stock')->first()->pivot->stock}}</h3>
-                  <div class="flex">
-                  <!-- ユーザとの中間テーブルにデータがあるか、所持数は１枚か２枚以上かで条件分岐 -->
-                    <!-- 更新ボタン -->
-                    <!-- 削除ボタン -->
-                  </div>
+                  <a href="{{ route('mastertest.show',$mastertest->id) }}">
+                    <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">カード名: {{$mastertest-> name}}</h3>
+                    <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">市場価格: {{explode(',',$mastertest-> price)[0]}} 円</h3>
+                    <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">レアリティ: {{$mastertest-> rarerity}}</h3>
+                    <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">個数: {{ $mastertest->users()->wherePivot('user_id', Auth::id())->withPivot('stock')->first()->pivot->stock}}</h3>
+                  </a>
                 </td>
               </tr>
               @endforeach

@@ -60,9 +60,10 @@ class MastertestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Mastertest $mastertest)
+    public function show($id)
     {
-        //
+        $mastertest = Mastertest::find($id);
+        return response()->view('commons.show',compact('mastertest'));
     }
 
     /**
@@ -95,7 +96,7 @@ class MastertestController extends Controller
         $data =[0,0];
         $mastertests=$user->mastertests()->get();
         foreach($mastertests as $mastertest){
-            $price = $mastertest->price;
+            $price = intval(explode(',',$mastertest->price)[0]);
             $stock =$mastertest->users()
                    ->wherePivot('user_id', Auth::id())
                    ->withPivot('stock')
