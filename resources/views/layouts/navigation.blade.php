@@ -85,7 +85,22 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
-            </x-responsive-nav-link>editing
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('mastertest.index')" :active="request()->routeIs('mastertest.index')">
+                {{ __('Cardlist') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('mastertest.create')" :active="request()->routeIs('mastertest.create')">
+                {{ __('Edit') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('mastertest.mypage')" :active="request()->routeIs('mastertest.mypage')">
+                {{ __('Mypage') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

@@ -30,7 +30,7 @@ $asset_json = json_encode($asset);
         </div>
       </div>
     </div>
-    <canvas id="AssetChart"></canvas>
+      <canvas id="AssetChart"></canvas>
     <script>
         let lineCtx = document.getElementById("AssetChart");
         const date = <?php echo $date_json; ?>;
