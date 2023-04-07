@@ -21,13 +21,13 @@ class MastertestController extends Controller
           ->find(Auth::user()->id)
           ->mastertests();
         
-        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
         if (!empty($selected_series_name)) {
             $mastertests = $mastertests->where('series_name', $selected_series_name);
         }
     
         $mastertests = $mastertests->orderByRaw('FIELD(rarerity, "'.implode('", "', $sortOrder).'")')
-                                   ->paginate(50); // 1ページあたり10件のアイテムを表示する場合
+                                   ->paginate(60); // 1ページあたり10件のアイテムを表示する場合
     
         return response()->view('commons.index', compact('mastertests', 'series_names', 'selected_series_name'));
     }
@@ -40,7 +40,7 @@ class MastertestController extends Controller
         $series_names = Mastertest::select('series_name')->distinct()->get();
         $selected_series_name = $request->input('series_name');
         $mastertests = Mastertest::getAllOrderByPrice();
-        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
         if (!empty($selected_series_name)) {
             $mastertests = $mastertests->where('series_name', $selected_series_name);
         } else {
@@ -49,7 +49,7 @@ class MastertestController extends Controller
         }
         
         $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-                                         ->paginate(50);
+                                         ->paginate(60);
 
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
@@ -134,7 +134,7 @@ class MastertestController extends Controller
         $series_names = Mastertest::select('series_name')->distinct()->get();
         $selected_series_name = $mastertest->series_name;
         $mastertests = Mastertest::getAllOrderByPrice();
-        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
         if (!empty($selected_series_name)) {
             $mastertests = $mastertests->where('series_name', $selected_series_name);
         } else {
@@ -143,7 +143,7 @@ class MastertestController extends Controller
         }
         
         $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-                                         ->paginate(50);
+                                         ->paginate(60);
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
     
@@ -160,7 +160,7 @@ class MastertestController extends Controller
             $series_names = Mastertest::select('series_name')->distinct()->get();
             $selected_series_name = $mastertest->series_name;
             $mastertests = Mastertest::getAllOrderByPrice();
-            $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+            $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
             if (!empty($selected_series_name)) {
                 $mastertests = $mastertests->where('series_name', $selected_series_name);
             } else {
@@ -169,7 +169,7 @@ class MastertestController extends Controller
             }
             
             $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-                                             ->paginate(50);
+                                             ->paginate(60);
             return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
         }
 
