@@ -29,7 +29,7 @@
                                 <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">カード名: {{$mastertest-> name}}</h3>
                                 <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">市場価格: {{explode(',',$mastertest-> price)[0]}} 円</h3>
                                 <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">レアリティ: {{$mastertest-> rarerity}}</h3>
-                                <img src="{{ $mastertest->image_url }}" alt="{{ $mastertest->name }}" class style="height: 160px;"  />
+                                <img src="{{ $mastertest->image_url }}" alt="{{ $mastertest->name }}" class style="height: 200px;"  />
                                 <h3 class="text-left font-bold text-lg text-gray-dark dark:text-gray-200">枚数: {{ $mastertest->users()->wherePivot('user_id', Auth::id())->withPivot('stock')->first()->pivot->stock}}</h3>
                             </div>
                         </a>
