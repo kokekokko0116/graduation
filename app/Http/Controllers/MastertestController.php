@@ -19,15 +19,17 @@ class MastertestController extends Controller
         $selected_series_name = $request->input('series_name');
         $mastertests = User::query()
           ->find(Auth::user()->id)
-          ->mastertests()
-          ->orderBy('created_at','desc')
-          ->get();
+          ->mastertests();
+        
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
             $mastertests = $mastertests->where('series_name', $selected_series_name);
         }
-        
-        return response()->view('commons.index', compact('mastertests','series_names', 'selected_series_name'));
-        
+    
+        $mastertests = $mastertests->orderByRaw('FIELD(rarerity, "'.implode('", "', $sortOrder).'")')
+                                   ->paginate(80); // 1ページあたり10件のアイテムを表示する場合
+    
+        return response()->view('commons.index', compact('mastertests', 'series_names', 'selected_series_name'));
     }
 
     /**
