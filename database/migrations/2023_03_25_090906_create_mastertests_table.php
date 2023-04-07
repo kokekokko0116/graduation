@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('price');
             $table->string('rarerity');
+            $table->text('image_url')->nullable();
             $table->timestamps();
         });
     }
