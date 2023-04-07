@@ -132,6 +132,7 @@ class MastertestController extends Controller
                    ->increment('stock');
         $series_names = Mastertest::select('series_name')->distinct()->get();
         $selected_series_name = $mastertest->series_name;
+        $mastertests = Mastertest::getAllOrderByPrice();
         $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
             $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
