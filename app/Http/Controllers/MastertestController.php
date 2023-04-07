@@ -38,13 +38,17 @@ class MastertestController extends Controller
         $series_names = Mastertest::select('series_name')->distinct()->get();
         $selected_series_name = $request->input('series_name');
         $mastertests = Mastertest::getAllOrderByPrice();
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
-            $mastertests = $mastertests->where('series_name', $selected_series_name);
+            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
+                return array_search($item->rarerity, $sortOrder);
+            });
         }
         else{
             $selected_series_name = Mastertest::getLatestSeriesnameById();
-            $mastertests = $mastertests->where('series_name', $selected_series_name);
-
+            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
+                return array_search($item->rarerity, $sortOrder);
+            });
         }
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
@@ -114,30 +118,52 @@ class MastertestController extends Controller
                 
         return response()->view('commons.mypage', compact('data','assets'));
     }
+
     
     public function increment(Request $request, $id)
     {
         $mastertest = Mastertest::find($id);
+        
         $mastertest->users()
                    ->wherePivot('user_id', Auth::id())
                    ->withPivot('stock')
                    ->first()
                    ->pivot
                    ->increment('stock');
-        return redirect()->route('mastertest.create');
+        $series_names = Mastertest::select('series_name')->distinct()->get();
+        $selected_series_name = $mastertest->series_name;
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+        if (!empty($selected_series_name)) {
+            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
+                return array_search($item->rarerity, $sortOrder);
+            });
+        }
+        return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
+    
       
-      public function decrement(Request $request, $id)
-      {
-        $mastertest = Mastertest::find($id);
+        public function decrement(Request $request, $id)
+        {
+            $mastertest = Mastertest::find($id);
             $mastertest->users()
-               ->wherePivot('user_id', Auth::id())
-               ->withPivot('stock')
-               ->first()
-               ->pivot
-               ->decrement('stock');
-        return redirect()->route('mastertest.create');
-      }
+                ->wherePivot('user_id', Auth::id())
+                ->withPivot('stock')
+                ->first()
+                ->pivot
+                ->decrement('stock');
+            $series_names = Mastertest::select('series_name')->distinct()->get();
+            $selected_series_name = $mastertest->series_name;
+            $mastertests = Mastertest::getAllOrderByPrice();
+            $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+            if (!empty($selected_series_name)) {
+                $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
+                    return array_search($item->rarerity, $sortOrder);
+                });
+            }
+        
+            return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
+        }
+
       
           
     public function index_result(Request $request)

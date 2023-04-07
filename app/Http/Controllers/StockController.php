@@ -30,7 +30,16 @@ class StockController extends Controller
         public function store(Mastertest $mastertest)
       {
         $mastertest->users()->attach(Auth::id());
-        return redirect()->route('mastertest.create');
+        $series_names = Mastertest::select('series_name')->distinct()->get();
+        $selected_series_name = $mastertest->series_name;
+        $mastertests = Mastertest::getAllOrderByPrice();
+        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
+        if (!empty($selected_series_name)) {
+            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
+                return array_search($item->rarerity, $sortOrder);
+            });
+        }
+        return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
       }
 
 
@@ -64,7 +73,13 @@ class StockController extends Controller
       public function destroy(Mastertest $mastertest)
       {
         $mastertest->users()->detach(Auth::id());
-        return redirect()->route('mastertest.create');
+        $series_names = Mastertest::select('series_name')->distinct()->get();
+        $selected_series_name = $mastertest->series_name;
+        $mastertests = Mastertest::getAllOrderByPrice();
+        if (!empty($selected_series_name)) {
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
+        }
+        return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
       }
 
 }
