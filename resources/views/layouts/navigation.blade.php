@@ -25,7 +25,6 @@
                         {{ __('Edit') }}
                     </x-nav-link>
                 </div>
-
             </div>
 
             <!-- Settings Dropdown -->
