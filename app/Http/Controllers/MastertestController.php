@@ -27,7 +27,7 @@ class MastertestController extends Controller
         }
     
         $mastertests = $mastertests->orderByRaw('FIELD(rarerity, "'.implode('", "', $sortOrder).'")')
-                                   ->paginate(80); // 1ページあたり10件のアイテムを表示する場合
+                                   ->paginate(50); // 1ページあたり10件のアイテムを表示する場合
     
         return response()->view('commons.index', compact('mastertests', 'series_names', 'selected_series_name'));
     }
@@ -42,16 +42,15 @@ class MastertestController extends Controller
         $mastertests = Mastertest::getAllOrderByPrice();
         $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
-            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
-                return array_search($item->rarerity, $sortOrder);
-            });
-        }
-        else{
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
+        } else {
             $selected_series_name = Mastertest::getLatestSeriesnameById();
-            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
-                return array_search($item->rarerity, $sortOrder);
-            });
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
         }
+        
+        $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                                         ->paginate(50);
+
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
 
@@ -137,10 +136,14 @@ class MastertestController extends Controller
         $mastertests = Mastertest::getAllOrderByPrice();
         $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
-            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
-                return array_search($item->rarerity, $sortOrder);
-            });
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
+        } else {
+            $selected_series_name = Mastertest::getLatestSeriesnameById();
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
         }
+        
+        $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                                         ->paginate(50);
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
     }
     
@@ -159,11 +162,14 @@ class MastertestController extends Controller
             $mastertests = Mastertest::getAllOrderByPrice();
             $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
             if (!empty($selected_series_name)) {
-                $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
-                    return array_search($item->rarerity, $sortOrder);
-                });
+                $mastertests = $mastertests->where('series_name', $selected_series_name);
+            } else {
+                $selected_series_name = Mastertest::getLatestSeriesnameById();
+                $mastertests = $mastertests->where('series_name', $selected_series_name);
             }
-        
+            
+            $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                                             ->paginate(50);
             return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
         }
 

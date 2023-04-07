@@ -40,13 +40,13 @@
         </div>
     </div>
 </div>
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:w-10/12 md:w-8/10 lg:w-8/12">
-            <div class="flex justify-center">
-                {{ $mastertests->appends(['series_name' => $selected_series_name])->links() }}
-            </div>
+<div class="py-6">
+    <div class="max-w-7xl mx-auto sm:w-10/12 md:w-8/10 lg:w-8/12">
+        <div class="flex justify-center">
+            {{ $mastertests->appends(['series_name' => $selected_series_name])->links('components.custom-pagination-links') }}
         </div>
     </div>
+</div>
 
 
 </x-app-layout>

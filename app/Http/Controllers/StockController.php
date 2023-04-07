@@ -35,10 +35,14 @@ class StockController extends Controller
         $mastertests = Mastertest::getAllOrderByPrice();
         $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
-            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
-                return array_search($item->rarerity, $sortOrder);
-            });
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
+        } else {
+            $selected_series_name = Mastertest::getLatestSeriesnameById();
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
         }
+        
+        $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                                         ->paginate(50);
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
       }
 
@@ -78,10 +82,14 @@ class StockController extends Controller
         $mastertests = Mastertest::getAllOrderByPrice();
         $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C'];
         if (!empty($selected_series_name)) {
-            $mastertests = $mastertests->where('series_name', $selected_series_name)->sortBy(function ($item) use ($sortOrder) {
-                return array_search($item->rarerity, $sortOrder);
-            });
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
+        } else {
+            $selected_series_name = Mastertest::getLatestSeriesnameById();
+            $mastertests = $mastertests->where('series_name', $selected_series_name);
         }
+        
+        $mastertests = $mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                                         ->paginate(50);
         return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
       }
 

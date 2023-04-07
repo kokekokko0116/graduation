@@ -12,7 +12,7 @@ class Mastertest extends Model
     
     public static function getAllOrderByPrice()
     {
-      return self::orderBy('price', 'desc')->get();
+      return self::query();
     }
     
     public function users()
