@@ -34,76 +34,51 @@ class SearchController extends Controller
     
     public function keyword_result(Request $request)
     {
-        $validatedData = $request->validate([
-            'keyword' => 'required|min:1|max:30',
-        ]);
-        $series_names = Mastertest::select('series_name')->distinct()->get();
-        $selected_series_name = 'すべてのシリーズ';
-        $keywords =  explode(' ', str_replace('　', ' ', trim($request->keyword)));
-        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
-    
-        $query_builders = [];
-        foreach($keywords as $keyword){
-            $query_builder = Mastertest::query()
+          $validatedData = $request->validate([
+              'keyword' => 'required|min:1|max:30',
+          ]);
+          $series_names = Mastertest::select('series_name')->distinct()->get();
+          $selected_series_name = 'すべてのシリーズ';
+          $keywords =  explode(' ', str_replace('　', ' ', trim($request->keyword)));
+          $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
+          $mastertests = Mastertest::query();
+          foreach($keywords as $keyword){
+              $mastertests = $mastertests
                 ->where('name', 'like', "%{$keyword}%")
                 ->orWhere('number', 'like', "%{$keyword}%")
                 ->orWhere('rarerity', 'like', "%{$keyword}%")
                 ->orWhere('series_name', 'like', "%{$keyword}%")
                 ->orWhere('series_number', 'like', "%{$keyword}%")
-                ->select('id');
-            $query_builders[] = $query_builder;
-        }
-    
-        $ids = [];
-        foreach ($query_builders as $query_builder) {
-            $ids = array_merge($ids, $query_builder->pluck('id')->toArray());
-        }
-    
-        $mastertests = Mastertest::query()
-            ->whereIn('id', $ids)
-            ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-            ->paginate(60);
-    
-        return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
-    }
+                ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                ->paginate(60);
+          }
 
+        return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
+    }
 
     public function mypage_keyword_result(Request $request)
     {
-        $validatedData = $request->validate([
-            'keyword' => 'required|min:1|max:30',
-        ]);
-        $series_names = User::query()->find(Auth::user()->id)->mastertests()->select('series_name')->distinct()->get();
-        $selected_series_name = 'すべてのシリーズ';
-        $keywords =  explode(' ', str_replace('　', ' ', trim($request->keyword)));
-        $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
-    
-        $query_builders = [];
-        foreach($keywords as $keyword){
-            $query_builder = Mastertest::query()
+          $validatedData = $request->validate([
+              'keyword' => 'required|min:1|max:30',
+          ]);
+          $series_names = User::query()->find(Auth::user()->id)->mastertests()->select('series_name')->distinct()->get();
+          $selected_series_name = 'すべてのシリーズ';
+          $keywords =  explode(' ', str_replace('　', ' ', trim($request->keyword)));
+          $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
+          $mastertests = User::query()->find(Auth::user()->id)->mastertests();
+          foreach($keywords as $keyword){
+              $mastertests = $mastertests
                 ->where('name', 'like', "%{$keyword}%")
                 ->orWhere('number', 'like', "%{$keyword}%")
                 ->orWhere('rarerity', 'like', "%{$keyword}%")
                 ->orWhere('series_name', 'like', "%{$keyword}%")
                 ->orWhere('series_number', 'like', "%{$keyword}%")
-                ->select('mastertests.id'); // ここを修正
-            $query_builders[] = $query_builder;
-        }
-    
-        $ids = [];
-        foreach ($query_builders as $query_builder) {
-            $ids = array_merge($ids, $query_builder->pluck('id')->toArray());
-        }
-    
-        $mastertests = User::query()->find(Auth::user()->id)->mastertests()
-            ->whereIn('mastertests.id', $ids) // ここを修正
-            ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-            ->paginate(60);
+                ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                ->paginate(60);
+          }
 
-    
-        return response()->view('commons.edit', compact('mastertests', 'series_names', 'selected_series_name'));
+        return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
     }
-
 
     /**
      * Show the form for creating a new resource.
