@@ -48,11 +48,9 @@ class SearchController extends Controller
                 ->orWhere('number', 'like', "%{$keyword}%")
                 ->orWhere('rarerity', 'like', "%{$keyword}%")
                 ->orWhere('series_name', 'like', "%{$keyword}%")
-                ->orWhere('series_number', 'like', "%{$keyword}%")
-                ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-                ->paginate(60);
+                ->orWhere('series_number', 'like', "%{$keyword}%");
           }
-
+        $mastertests=$mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")->paginate(60);
         return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
     }
 
@@ -72,10 +70,9 @@ class SearchController extends Controller
                 ->orWhere('number', 'like', "%{$keyword}%")
                 ->orWhere('rarerity', 'like', "%{$keyword}%")
                 ->orWhere('series_name', 'like', "%{$keyword}%")
-                ->orWhere('series_number', 'like', "%{$keyword}%")
-                ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
-                ->paginate(60);
+                ->orWhere('series_number', 'like', "%{$keyword}%");
           }
+          $mastertests=$mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")->paginate(60);
 
         return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
     }
