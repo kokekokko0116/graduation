@@ -1,17 +1,19 @@
 
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('資産編集画面') }}
-        </h2>
+<x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ __('資産編集画面') }}
+    </h2>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="flex items-center justify-center h-full w-full">
             <form method="GET" action="{{ route('mastertest.create') }}" class="w-full max-w-md">
                 <div class="flex items-center bg-white dark:bg-gray-800 rounded-md overflow-hidden">
                     <select name="series_name" onchange="this.form.submit()" class="w-full px-3 py-2 text-gray-700 dark:text-gray-300 bg-transparent focus:outline-none">
+                        <option value="{{ $selected_series_name }}" @if (!isset($selected_series_name) || empty($selected_series_name)) selected @endif>{{$selected_series_name}}</option>
                         @foreach ($series_names as $series_name)
-                            <option value="{{ $series_name->series_name }}" @if ($selected_series_name == $series_name->series_name) selected @endif>
+                            <option value="{{ $series_name->series_name }}">
                                 {{ $series_name->series_name }}
                             </option>
                         @endforeach
@@ -19,8 +21,26 @@
                 </div>
             </form>
         </div>
+        <div>
+            <form class="mb-6" action="{{ route('search.keyword_result') }}" method="GET">
+                @csrf
+                <div class="flex flex-col mb-4">
+                    <x-input-label for="keyword" :value="__('Keyword')" />
+                    <x-text-input id="keyword" class="block mt-1 w-full" type="text" name="keyword" :value="old('keyword')" autofocus placeholder="複数のキーワードをスペース区切りで検索可能" />
+                </div>
+                @error('keyword')
+                    <span class="text-red-600">{{ $message }}</span>
+                @enderror
+                <div class="flex items-center justify-end mt-4">
+                    <x-primary-button class="ml-3">
+                        {{ __('Search') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </div>
+    </div>
+</x-slot>
 
-    </x-slot>
 
       <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto sm:w-10/12 md:w-8/10 lg:w-8/12">

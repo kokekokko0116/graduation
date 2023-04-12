@@ -17,6 +17,23 @@
               </div>
           </form>
         </div>
+        <div>
+            <form class="mb-6" action="{{ route('search.mypage_keyword_result') }}" method="GET">
+                @csrf
+                <div class="flex flex-col mb-4">
+                    <x-input-label for="keyword" :value="__('Keyword')" />
+                    <x-text-input id="keyword" class="block mt-1 w-full" type="text" name="keyword" :value="old('keyword')" autofocus placeholder="複数のキーワードをスペース区切りで検索可能" />
+                </div>
+                @error('keyword')
+                    <span class="text-red-600">{{ $message }}</span>
+                @enderror
+                <div class="flex items-center justify-end mt-4">
+                    <x-primary-button class="ml-3">
+                        {{ __('Search') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </div>
 
     </x-slot>
 

@@ -31,6 +31,52 @@ class SearchController extends Controller
             ->get();
         return response()->view('commons.index',compact('mastertests','series_names'));
     }
+    
+    public function keyword_result(Request $request)
+    {
+          $validatedData = $request->validate([
+              'keyword' => 'required|min:1|max:30',
+          ]);
+          $series_names = Mastertest::select('series_name')->distinct()->get();
+          $selected_series_name = 'すべてのシリーズ';
+          $keywords =  explode(' ', str_replace('　', ' ', trim($request->keyword)));
+          $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
+          foreach($keywords as $keyword){
+              $mastertests = Mastertest::query()
+                ->where('name', 'like', "%{$keyword}%")
+                ->orWhere('number', 'like', "%{$keyword}%")
+                ->orWhere('rarerity', 'like', "%{$keyword}%")
+                ->orWhere('series_name', 'like', "%{$keyword}%")
+                ->orWhere('series_number', 'like', "%{$keyword}%")
+                ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                ->paginate(60);
+          }
+
+        return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
+    }
+
+    public function mypage_keyword_result(Request $request)
+    {
+          $validatedData = $request->validate([
+              'keyword' => 'required|min:1|max:30',
+          ]);
+          $series_names = User::query()->find(Auth::user()->id)->mastertests()->select('series_name')->distinct()->get();
+          $selected_series_name = 'すべてのシリーズ';
+          $keywords =  explode(' ', str_replace('　', ' ', trim($request->keyword)));
+          $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
+          foreach($keywords as $keyword){
+              $mastertests = User::query()->find(Auth::user()->id)->mastertests()
+                ->where('name', 'like', "%{$keyword}%")
+                ->orWhere('number', 'like', "%{$keyword}%")
+                ->orWhere('rarerity', 'like', "%{$keyword}%")
+                ->orWhere('series_name', 'like', "%{$keyword}%")
+                ->orWhere('series_number', 'like', "%{$keyword}%")
+                ->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")
+                ->paginate(60);
+          }
+
+        return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
+    }
 
     /**
      * Show the form for creating a new resource.

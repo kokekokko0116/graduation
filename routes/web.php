@@ -20,12 +20,13 @@ use App\Http\Controllers\SearchController;
 // ログインしていないときはアプリケーション利用不可となるコード
 Route::middleware('auth')->group(function () {
   Route::get('/mypage', [MastertestController::class, 'mypage'])->name('mastertest.mypage');
+  Route::get('/mastertest/search/mypage_keyword_result', [SearchController::class, 'mypage_keyword_result'])->name('search.mypage_keyword_result');
+  Route::get('/mastertest/search/keyword_result', [SearchController::class, 'keyword_result'])->name('search.keyword_result');
   Route::get('mastertest/search/edit_result', [SearchController::class, 'edit_result'])->name('search.edit_result');
   Route::post('mastertest/{mastertest}/stock', [StockController::class, 'store'])->name('stock');
   Route::post('mastertest/{mastertest}/unstock', [StockController::class, 'destroy'])->name('unstock');
   Route::post('mastertest/{mastertest}/increment', [MastertestController::class, 'increment'])->name('mastertest.increment');
   Route::post('mastertest/{mastertest}/decrement', [MastertestController::class, 'decrement'])->name('mastertest.decrement');
-
   Route::resource('card', CardController::class);
   Route::resource('mastertest', MastertestController::class);
 });

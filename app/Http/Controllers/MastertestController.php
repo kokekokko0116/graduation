@@ -15,7 +15,7 @@ class MastertestController extends Controller
      */
     public function index(Request $request)
     {
-        $series_names = Mastertest::select('series_name')->distinct()->get();
+        $series_names = User::query()->find(Auth::user()->id)->mastertests()->select('series_name')->distinct()->get();
         $selected_series_name = $request->input('series_name');
         $mastertests = User::query()
           ->find(Auth::user()->id)
