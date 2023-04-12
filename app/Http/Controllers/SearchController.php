@@ -43,14 +43,15 @@ class SearchController extends Controller
           $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
           $mastertests = Mastertest::query();
           foreach($keywords as $keyword){
-              $mastertests = $mastertests
-                ->where('name', 'like', "%{$keyword}%")
-                ->orWhere('number', 'like', "%{$keyword}%")
-                ->orWhere('rarerity', 'like', "%{$keyword}%")
-                ->orWhere('series_name', 'like', "%{$keyword}%")
-                ->orWhere('series_number', 'like', "%{$keyword}%");
+            $mastertests = $mastertests->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('number', 'like', "%{$keyword}%")
+                    ->orWhere('rarerity', 'like', "%{$keyword}%")
+                    ->orWhere('series_name', 'like', "%{$keyword}%")
+                    ->orWhere('series_number', 'like', "%{$keyword}%");
+            });
           }
-        $mastertests=$mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")->paginate(60);
+          $mastertests=$mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")->paginate(60);
         return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
     }
 
@@ -65,16 +66,17 @@ class SearchController extends Controller
           $sortOrder = ['UR', 'HR', 'SR', 'CHR', 'SAR', 'CSR', 'AR', 'S', 'K', 'H', 'A', 'PR', 'TR', 'RRR', 'RR', 'R', 'UC', 'U', 'C','-'];
           $mastertests = User::query()->find(Auth::user()->id)->mastertests();
           foreach($keywords as $keyword){
-              $mastertests = $mastertests
-                ->where('name', 'like', "%{$keyword}%")
-                ->orWhere('number', 'like', "%{$keyword}%")
-                ->orWhere('rarerity', 'like', "%{$keyword}%")
-                ->orWhere('series_name', 'like', "%{$keyword}%")
-                ->orWhere('series_number', 'like', "%{$keyword}%");
+            $mastertests = $mastertests->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('number', 'like', "%{$keyword}%")
+                    ->orWhere('rarerity', 'like', "%{$keyword}%")
+                    ->orWhere('series_name', 'like', "%{$keyword}%")
+                    ->orWhere('series_number', 'like', "%{$keyword}%");
+            });
           }
           $mastertests=$mastertests->orderByRaw("FIELD(rarerity, '".implode("','", $sortOrder)."')")->paginate(60);
 
-        return response()->view('commons.edit',compact('mastertests','series_names','selected_series_name'));
+          return response()->view('commons.index',compact('mastertests','series_names','selected_series_name'));
     }
 
     /**
